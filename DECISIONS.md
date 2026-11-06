@@ -28,12 +28,16 @@ Known gaps, things you'd flag in a PR description, tests you know are missing.
 - **Refactoring to review later (Big O):** `AttachmentDeduplicationRule` and `LooseFileDeduplicationRule` pick the survivor with a `Dictionary<hash, lowest DocId>`. That is O(n) time (one pass to build, one pass to filter) and O(k) extra space, where k is the number of distinct hashes. Kept the dictionary for now because batches reach about 2 million documents (6.2). Revisit after measuring both at that size, and together with extracting the "keep lowest DocId per hash for a given docType" logic that both rules duplicate.
 
 - **Cross-mailbox email deduplication:** (SPEC.md/3.3) This feature is expected to be included in the current user story. The user story _"INGEST-4471 — Emails arriving in review without their attachments"_ addresses an existing issue, so fixing it should be the priority.
-- ****
+- 
 
 ## What I'd do next
 
--
-
+- **Cross-mailbox email deduplication:** (SPEC.md/3.3) Include as new deputation rule "CrossMailboxDeduplicationRule"
+- **Refactoring/Tech-debt**
+  - **Deduper.cs** Remove multiple conditionals to simplify the processing logic, reduce complexity, and delegate deduplication decisions to the individual rule implementations.
+  - **Model classes** `Batch`, `Document`, `Document`, `DedupResult` should have its own class files.
+- **Edge Case Tests:** Reviewed the existing deduplication rules and added test scenarios to cover cross-rule deduplication cases. 
+    
 ## If you reimplemented in another language
 
 Why, and what you did to make sure the output contract is preserved.
@@ -44,4 +48,5 @@ Why, and what you did to make sure the output contract is preserved.
 
 What it got right, what you had to correct or reject, and anything you'd warn a teammate about.
 
--
+- Please find the AI assistant conversations attached in docs `docs/2026-11-06-111204 KLD - Fixing the existing deduplication rules.txt` 
+
